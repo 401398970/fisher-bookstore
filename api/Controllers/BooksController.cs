@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fisher.Bookstore.Models;
 using Microsoft.AspNetCore.Mvc;
+using Fisher.Bookstore.Api.Data;
 
 namespace Fisher.Bookstore.Api.Controllers
 {
@@ -112,7 +113,7 @@ namespace Fisher.Bookstore.Api.Controllers
             db.Books.Remove(book);
             db.SaveChanges();
 
-            return Nocontent();
+            return NoContent();
         }
     }
 }
