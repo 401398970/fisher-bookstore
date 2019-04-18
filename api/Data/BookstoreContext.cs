@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Fisher.Bookstore.Models;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Fisher.Bookstore.Api.Models;
 
 namespace Fisher.Bookstore.Api.Data
 {
-    public class BookstoreContext : DbContext
+    public class BookstoreContext : IdentityDbContext<ApplicationUser>
     {
         public BookstoreContext(DbContextOptions<BookstoreContext> options)
             : base(options)
