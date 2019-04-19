@@ -33,8 +33,17 @@ namespace Fisher.Bookstore.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BookstoreContext>(options =>
-        options.UseNpgsql(Configuration.GetConnectionString("BookstoreContext")));
+            services.AddDbContext<BookstoreContext>(options => options.UseNpgsql(Configuration.GetConnectionString("BookstoreContext")));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
 
             //Add this for identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -55,11 +64,12 @@ namespace Fisher.Bookstore.Api
                         ValidateLifetime = true,
                         ValidIssuer = Configuration["JWTConfiguration:Issuer"],
                         ValidAudience = Configuration["JWTConfiguration:Audience"],
-                        IssuerSigningKey = new
-            SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTConfiguration.Key"])
-            )
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTConfiguration.Key"])
+                    )
                 };
             });
+
+            
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -79,6 +89,7 @@ namespace Fisher.Bookstore.Api
             // Add this for identity
             app.UseAuthentication();
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseMvc();
         }
     }
